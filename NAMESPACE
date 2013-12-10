@@ -1,0 +1,63 @@
+import("stats", "Formula")
+importFrom("lmtest", "coeftest")
+importFrom("sandwich", "bread", "estfun")
+importFrom("MASS", "negative.binomial")
+
+export(
+  ## heteroskedastic GLMs
+  "hetglm",
+  "hetglm.fit",
+  "hetglm.control",
+  
+  ## optimize GLMs with eXtra parameters
+  "glmx",
+  "glmx.fit",
+  "glmx.control",
+  
+  ## Pregibon distribution
+  "dpregibon",
+  "ppregibon",
+  "qpregibon",
+  "rpregibon",
+
+  ## (parametric) link-glm generators
+  "angular",
+  "ao1",
+  "ao2",
+  "foldexp",
+  "gj",
+  "gosset",
+  "loglog",
+  "nblogit",
+  "pregibon",
+  "rocke",
+  "talpha"
+)
+
+## methods for class hetglm
+S3method("coef", "hetglm")
+S3method("logLik", "hetglm")
+S3method("model.frame", "hetglm")
+S3method("model.matrix", "hetglm")
+S3method("predict", "hetglm")
+S3method("print", "hetglm")
+S3method("print", "summary.hetglm")
+S3method("residuals", "hetglm")
+S3method("summary", "hetglm")
+S3method("terms", "hetglm")
+S3method("update", "hetglm")
+S3method("vcov", "hetglm")
+
+S3method("coeftest", "hetglm")
+S3method("bread", "hetglm")
+S3method("estfun", "hetglm")
+
+## methods for class glmx
+S3method("coef", "glmx")
+S3method("formula", "glmx")
+S3method("logLik", "glmx")
+S3method("nobs", "glmx")
+S3method("vcov", "glmx")
+S3method("print", "glmx")
+S3method("print", "summary.glmx")
+S3method("summary", "glmx")

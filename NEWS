@@ -1,0 +1,10 @@
+Changes in Version 0.1-0
+
+  o First CRAN release of "glmx". However, all functions are
+    still under development and both interfaces and internals
+    might change in future releases.
+    
+  o The main functions are hetglm() for heteroskedastic GLMs
+    (in particular heteroskedastic probit etc.), glmx() for GLMs
+    with extra parameters (such as parametric links), and a collection
+    of parametric links for binary regressions.
