@@ -81,7 +81,7 @@ of a Heteroskedastic Probit Model of Competing Values.} \emph{American Journal o
 Science}, \bold{39}(4), 1055--1082.
 
 Keele LJ, Park DK (2006). \emph{Ambivalent about Ambivalence: A Re-Examination of Heteroskedastic Probit Models.}
-Unpublished manuscript. \url{http://www.polisci.ohio-state.edu/faculty/lkeele/hetprob.pdf}
+Unpublished manuscript.
 }
 
 \seealso{\code{\link{hetglm}}}

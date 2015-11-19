@@ -9,6 +9,7 @@
 \alias{print.glmx}
 \alias{summary.glmx}
 \alias{vcov.glmx}
+\alias{predict.glmx}
 
 \title{Generalized Linear Models with Extra Parameters}
 

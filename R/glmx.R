@@ -220,8 +220,8 @@ glmx.fit <- function(x, y, weights = NULL, offset = NULL,
   }
 
   if(hessian != "none") {
-    vc <- if(hessian == "numDeriv" && require("numDeriv")) {
-      hessian(full_loglik, c(beta, gamma))
+    vc <- if(hessian == "numDeriv") {
+      numDeriv::hessian(full_loglik, c(beta, gamma))
     } else {
       as.matrix(opt2$hessian)
     }
@@ -373,4 +373,46 @@ print.summary.glmx <- function(x, digits = max(3, getOption("digits") - 3), ...)
   }
   
   invisible(x)
+}
+
+predict.glmx <- function(object, newdata = NULL,
+  type = c("response", "link"), na.action = na.pass, ...) 
+{
+  type <- match.arg(type)
+  f <- object$family$glm
+  
+  if(missing(newdata)) {
+
+    rval <- switch(type,
+      "response" = object$fitted.values,
+      "link" = f$linkfun(object$fitted.values)
+    )
+    names(rval) <- names(object$fitted.values)
+    return(rval)
+
+  } else {
+
+    ## model frame and matrix
+    mf <- model.frame(delete.response(object$terms), newdata, na.action = na.action, xlev = object$levels)
+    X <- model.matrix(delete.response(object$terms), mf, contrasts = object$contrasts)
+
+    ## offset
+    newdata <- newdata[rownames(mf), , drop = FALSE]
+    offset <- rep.int(0, nrow(mf))
+    if(!is.null(object$call$offset)) offset <- offset + eval(object$call$offset, newdata)
+    if(!is.null(off.num <- attr(object$terms, "offset"))) {
+      for(j in off.num) offset <- offset + eval(attr(object$terms, "variables")[[j + 1L]], newdata)
+    }
+
+    ## linear predictor
+    eta <- drop(X %*% object$coefficients$glm + offset)
+
+    rval <- switch(type,    
+      "response" = f$linkinv(eta),      
+      "link" = eta
+    )
+    names(rval) <- rownames(mf)
+    return(rval)
+
+  }
 }

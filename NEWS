@@ -1,3 +1,10 @@
+Changes in Version 0.1-1
+
+  o Added predict() method for "glmx" objects.
+  
+  o Small improvements in NAMESPACE.
+
+
 Changes in Version 0.1-0
 
   o First CRAN release of "glmx". However, all functions are
