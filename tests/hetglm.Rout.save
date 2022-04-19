@@ -1,0 +1,145 @@
+
+R version 3.4.1 (2017-06-30) -- "Single Candle"
+Copyright (C) 2017 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> ## regressors
+> set.seed(6020)
+> d <- data.frame(
++   x = runif(500, -1, 1),
++   z = runif(500, -1, 1)
++ )
+> 
+> ## rational predictor
+> d$eta <- (0 + 1 * d$x) / exp(1 * d$z)
+> 
+> ## Gaussian, binary, and Poisson response
+> d$ynum <- rnorm(500, mean = d$eta, sd = 1)
+> d$ybin <- factor(rbinom(500, prob = plogis(d$eta), size = 1))
+> d$ypoi <- rpois(500, lambda = exp(d$eta))
+> 
+> ## rational GLMs
+> library("glmx")
+> mnum <- hetglm(ynum ~ x | z, data = d, family = gaussian)
+> mbin <- hetglm(ybin ~ x | z, data = d, family = binomial)
+> mpoi <- hetglm(ypoi ~ x | z, data = d, family = poisson)
+> 
+> ## comparison of coefficients
+> options(digits = 4)
+> cbind(
++   "True" = c(0, 1, 1),
++   "Gaussian" = coef(mnum),
++   "Binary" = coef(mbin),
++   "Poisson" = coef(mpoi)
++ )
+            True Gaussian   Binary  Poisson
+(Intercept)    0  0.04961 -0.04883 -0.01406
+x              1  0.91870  1.02430  1.03770
+(scale)_z      1  1.11825  1.08259  0.95636
+> 
+> ## confidence intervals
+> confint(mnum)
+                2.5 % 97.5 %
+(Intercept) -0.007106 0.1063
+x            0.740608 1.0968
+(scale)_z    0.843202 1.3933
+> confint(mbin)
+              2.5 %  97.5 %
+(Intercept) -0.1906 0.09289
+x            0.6154 1.43318
+(scale)_z    0.4592 1.70595
+> confint(mpoi)
+               2.5 % 97.5 %
+(Intercept) -0.09172 0.0636
+x            0.86476 1.2106
+(scale)_z    0.75911 1.1536
+> 
+> ## full summaries
+> summary(mnum)
+
+Call:
+hetglm(formula = ynum ~ x | z, data = d, family = gaussian)
+
+Deviance residuals:
+   Min     1Q Median     3Q    Max 
+-2.863 -0.712 -0.051  0.651  3.003 
+
+Coefficients (gaussian model with identity link):
+            Estimate Std. Error z value Pr(>|z|)    
+(Intercept)   0.0496     0.0289    1.71    0.086 .  
+x             0.9187     0.0909   10.11   <2e-16 ***
+
+Latent scale model coefficients (with log link):
+  Estimate Std. Error z value Pr(>|z|)    
+z     1.12       0.14    7.97  1.6e-15 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+
+Log-likelihood: -734 on 3 Df
+LR test for homoscedasticity: 71.4 on 1 Df, p-value: <2e-16
+Dispersion: 0.887
+Number of iterations in nlminb optimization: 6 
+> summary(mbin)
+
+Call:
+hetglm(formula = ybin ~ x | z, data = d, family = binomial)
+
+Deviance residuals:
+   Min     1Q Median     3Q    Max 
+-2.103 -1.092 -0.426  1.101  2.070 
+
+Coefficients (binomial model with logit link):
+            Estimate Std. Error z value Pr(>|z|)    
+(Intercept)  -0.0488     0.0723   -0.68      0.5    
+x             1.0243     0.2086    4.91  9.1e-07 ***
+
+Latent scale model coefficients (with log link):
+  Estimate Std. Error z value Pr(>|z|)    
+z    1.083      0.318     3.4  0.00066 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+
+Log-likelihood: -311 on 3 Df
+LR test for homoscedasticity:   19 on 1 Df, p-value: 1.34e-05
+Dispersion: 1
+Number of iterations in nlminb optimization: 7 
+> summary(mpoi)
+
+Call:
+hetglm(formula = ypoi ~ x | z, data = d, family = poisson)
+
+Deviance residuals:
+   Min     1Q Median     3Q    Max 
+-2.246 -1.032 -0.258  0.544  3.069 
+
+Coefficients (poisson model with log link):
+            Estimate Std. Error z value Pr(>|z|)    
+(Intercept)  -0.0141     0.0396   -0.35     0.72    
+x             1.0377     0.0882   11.76   <2e-16 ***
+
+Latent scale model coefficients (with log link):
+  Estimate Std. Error z value Pr(>|z|)    
+z    0.956      0.101     9.5   <2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+
+Log-likelihood: -664 on 3 Df
+LR test for homoscedasticity:  147 on 1 Df, p-value: <2e-16
+Dispersion: 1
+Number of iterations in nlminb optimization: 7 
+> 
+> proc.time()
+   user  system elapsed 
+  0.584   0.024   0.603 

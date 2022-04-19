@@ -128,7 +128,7 @@
   Liu C (2004). \dQuote{Robit Regression: A Simple Robust Alternative to Logistic and Probit Regression.}
     In Gelman A, Meng X-L (Eds.),
     \emph{Applied Bayesian Modeling and Causal Inference from Incomplete-Data Perspectives}, Chapter 21,
-    pp. 227--238. John Wiley \& Sons.
+    pp. 227--238. John Wiley & Sons.
 
   Piepho H (2003). The Folded Exponential Transformation for Proportions.
     \emph{Journal of the Royal Statistical Society D}, \bold{52}, 575--589.

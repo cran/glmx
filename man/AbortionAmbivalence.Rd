@@ -69,7 +69,7 @@ accuracy and by Keele and Park (2006) with focus on interpretability.
 \source{
 Online supplements to Altman and McDonald (2003).
 
-\url{http://dx.doi.org/10.1093/pan/mpg016}
+\doi{10.1093/pan/mpg016}
 }
 
 \references{
@@ -110,7 +110,7 @@ tab1 <- sapply(names(AbortionAmbivalence)[1:7], function(x) {
   m0 <- hetglm(f0, data = model.frame(m))
   c(Percent_yes = as.vector(100 * prop.table(table(AbortionAmbivalence[[x]]))["yes"]),
     coef(m)[c(1:10, 14, 11:13)],
-    Heteroskedasticity = as.vector(summary(m)$lrtest[1]),
+    Heteroscedasticity = as.vector(summary(m)$lrtest[1]),
     N = nobs(m),
     Goodness_of_fit = 2 * as.vector(logLik(m) - logLik(m0))
   )

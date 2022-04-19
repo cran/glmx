@@ -1,0 +1,716 @@
+
+R version 4.1.2 (2021-11-01) -- "Bird Hippie"
+Copyright (C) 2021 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> pkgname <- "glmx"
+> source(file.path(R.home("share"), "R", "examples-header.R"))
+> options(warn = 1)
+> library('glmx')
+> 
+> base::assign(".oldSearch", base::search(), pos = 'CheckExEnv')
+> base::assign(".old_wd", base::getwd(), pos = 'CheckExEnv')
+> cleanEx()
+> nameEx("AbortionAmbivalence")
+> ### * AbortionAmbivalence
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: AbortionAmbivalence
+> ### Title: American Ambivalence towards Abortion Policy
+> ### Aliases: AbortionAmbivalence
+> ### Keywords: datasets
+> 
+> ### ** Examples
+> 
+> data("AbortionAmbivalence")
+> 
+> ## first model for mother's health
+> ab_health <- hetglm(
++   health ~ ethnicity + gender + religion + religiousness + church + erameans + erasupport |
++   pros * cons + importance + information + firmness, data = AbortionAmbivalence)
+> summary(ab_health)
+
+Call:
+hetglm(formula = health ~ ethnicity + gender + religion + religiousness + 
+    church + erameans + erasupport | pros * cons + importance + information + 
+    firmness, data = AbortionAmbivalence)
+
+Deviance residuals:
+    Min      1Q  Median      3Q     Max 
+-3.8070  0.1287  0.2870  0.4568  1.0023 
+
+Coefficients (binomial model with probit link):
+                 Estimate Std. Error z value Pr(>|z|)    
+(Intercept)       2.54783    0.50063   5.089 3.59e-07 ***
+ethnicityafam    -0.51181    0.16059  -3.187 0.001437 ** 
+gendermale       -0.07924    0.12267  -0.646 0.518342    
+religioncatholic -0.52051    0.15352  -3.390 0.000698 ***
+religiousness    -0.39103    0.21914  -1.784 0.074361 .  
+church           -1.03817    0.28450  -3.649 0.000263 ***
+erameansyes      -0.01783    0.19842  -0.090 0.928395    
+erasupport        0.32614    0.20229   1.612 0.106914    
+
+Latent scale model coefficients (with log link):
+             Estimate Std. Error z value Pr(>|z|)   
+pros        -0.139936   0.083166  -1.683  0.09245 . 
+cons         0.168879   0.095989   1.759  0.07852 . 
+importance   0.005134   0.150177   0.034  0.97273   
+information  0.371232   0.130880   2.836  0.00456 **
+firmness    -0.370524   0.172109  -2.153  0.03133 * 
+pros:cons   -0.043997   0.045827  -0.960  0.33702   
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+
+Log-likelihood: -312.5 on 14 Df
+LR test for homoscedasticity: 47.75 on 6 Df, p-value: 1.328e-08
+Dispersion: 1
+Number of iterations in nlminb optimization: 15 
+> 
+> ## corresponding model with analytical gradients but numerical Hessian
+> ab_health2 <- update(ab_health, method = "BFGS", hessian = TRUE)
+> summary(ab_health2)
+
+Call:
+hetglm(formula = health ~ ethnicity + gender + religion + religiousness + 
+    church + erameans + erasupport | pros * cons + importance + information + 
+    firmness, data = AbortionAmbivalence, method = "BFGS", hessian = TRUE)
+
+Deviance residuals:
+    Min      1Q  Median      3Q     Max 
+-3.8071  0.1287  0.2870  0.4568  1.0023 
+
+Coefficients (binomial model with probit link):
+                 Estimate Std. Error z value Pr(>|z|)    
+(Intercept)       2.54784    0.48612   5.241  1.6e-07 ***
+ethnicityafam    -0.51181    0.16408  -3.119 0.001813 ** 
+gendermale       -0.07923    0.12507  -0.634 0.526400    
+religioncatholic -0.52051    0.15130  -3.440 0.000581 ***
+religiousness    -0.39103    0.21941  -1.782 0.074715 .  
+church           -1.03816    0.27481  -3.778 0.000158 ***
+erameansyes      -0.01783    0.19901  -0.090 0.928610    
+erasupport        0.32614    0.20831   1.566 0.117442    
+
+Latent scale model coefficients (with log link):
+             Estimate Std. Error z value Pr(>|z|)   
+pros        -0.139939   0.076294  -1.834  0.06662 . 
+cons         0.168878   0.098420   1.716  0.08618 . 
+importance   0.005138   0.144243   0.036  0.97158   
+information  0.371236   0.133487   2.781  0.00542 **
+firmness    -0.370525   0.171330  -2.163  0.03057 * 
+pros:cons   -0.043997   0.044412  -0.991  0.32186   
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+
+Log-likelihood: -312.5 on 14 Df
+LR test for homoscedasticity: 47.75 on 6 Df, p-value: 1.328e-08
+Dispersion: 1
+Number of iterations in BFGS optimization: 21 
+> 
+> ## Alvarez and Brehm (1995), Table 1, p. 1069
+> ## (see also Altman and McDonald, 2003, Supplement, Tables 4-10)
+> tab1 <- sapply(names(AbortionAmbivalence)[1:7], function(x) {
++   f <- as.formula(paste(x,
++     "~ ethnicity + gender + religion + religiousness + church + erameans + erasupport",
++     "| pros * cons + importance + information + firmness"))
++   f0 <- as.formula(paste(x, "~ 1"))
++   m <- hetglm(f, data = AbortionAmbivalence)
++   m0 <- hetglm(f0, data = model.frame(m))
++   c(Percent_yes = as.vector(100 * prop.table(table(AbortionAmbivalence[[x]]))["yes"]),
++     coef(m)[c(1:10, 14, 11:13)],
++     Heteroscedasticity = as.vector(summary(m)$lrtest[1]),
++     N = nobs(m),
++     Goodness_of_fit = 2 * as.vector(logLik(m) - logLik(m0))
++   )
++ })
+> round(tab1, digits = 2)
+                     health    rape  defect    poor  nomore  single     any
+Percent_yes           90.39   83.90   82.14   48.96   45.83   45.52   38.52
+(Intercept)            2.55    1.92    2.02    0.09    0.03    0.11   -0.07
+ethnicityafam         -0.51   -0.47   -0.54   -0.09   -0.11   -0.23   -0.15
+gendermale            -0.08   -0.21   -0.21   -0.04   -0.02   -0.06   -0.13
+religioncatholic      -0.52   -0.15   -0.33    0.01    0.02   -0.03    0.05
+religiousness         -0.39   -0.17   -0.51   -0.17   -0.13   -0.18   -0.22
+church                -1.04   -0.99   -0.91   -0.35   -0.43   -0.47   -0.79
+erameansyes           -0.02   -0.14    0.01    0.10    0.09    0.09    0.12
+erasupport             0.33    0.12    0.40    0.22    0.31    0.31    0.51
+(scale)_pros          -0.14   -0.19   -0.06   -0.25   -0.26   -0.34   -0.22
+(scale)_cons           0.17    0.20    0.37   -0.50   -0.58   -0.41   -0.48
+(scale)_pros:cons     -0.04   -0.03   -0.09    0.19    0.25    0.21    0.22
+(scale)_importance     0.01    0.17   -0.14   -0.16   -0.18   -0.24   -0.30
+(scale)_information    0.37   -0.13    0.05   -0.32   -0.28   -0.28    0.68
+(scale)_firmness      -0.37   -0.58   -0.61    0.60    0.47    1.81    0.63
+Heteroscedasticity    47.75   46.66   41.21   12.55   19.89   27.16   25.87
+N                   1312.00 1302.00 1294.00 1291.00 1289.00 1293.00 1295.00
+Goodness_of_fit      126.12  173.65  181.27  142.34  182.86  193.55  180.91
+> 
+> 
+> if(require("AER")) {
++ ## compare Wald tests with different types of standard errors
++ coeftest(ab_health)
++ coeftest(ab_health2)
++ coeftest(ab_health,  vcov = sandwich)
++ coeftest(ab_health2, vcov = sandwich)
++ coeftest(ab_health,  vcov = vcovOPG)
++ coeftest(ab_health2, vcov = vcovOPG)
++ 
++ ab_health_tstat <- cbind(
++   "A-Info"     = coeftest(ab_health)[,3],
++   "N-Info"     = coeftest(ab_health2)[,3],
++   "A-Sandwich" = coeftest(ab_health,  vcov = sandwich)[,3],
++   "N-Sandwich" = coeftest(ab_health2, vcov = sandwich)[,3],
++   "A-OPG"      = coeftest(ab_health,  vcov = vcovOPG)[,3],
++   "N-OPG"      = coeftest(ab_health2, vcov = vcovOPG)[,3]
++ )
++ round(ab_health_tstat, digits = 3)
++ }
+Loading required package: AER
+Loading required package: car
+Loading required package: carData
+Loading required package: lmtest
+Loading required package: zoo
+
+Attaching package: ‘zoo’
+
+The following objects are masked from ‘package:base’:
+
+    as.Date, as.Date.numeric
+
+Loading required package: sandwich
+Loading required package: survival
+                    A-Info N-Info A-Sandwich N-Sandwich  A-OPG  N-OPG
+(Intercept)          5.089  5.241      4.485      5.026  5.092  5.092
+ethnicityafam       -3.187 -3.119     -2.955     -3.017 -2.983 -2.983
+gendermale          -0.646 -0.634     -0.672     -0.672 -0.575 -0.575
+religioncatholic    -3.390 -3.440     -3.246     -3.579 -3.124 -3.124
+religiousness       -1.784 -1.782     -1.566     -1.652 -1.790 -1.790
+church              -3.649 -3.778     -3.216     -3.742 -3.513 -3.513
+erameansyes         -0.090 -0.090     -0.088     -0.092 -0.083 -0.083
+erasupport           1.612  1.566      1.570      1.590  1.403  1.403
+(scale)_pros        -1.683 -1.834     -1.176     -1.519 -2.047 -2.047
+(scale)_cons         1.759  1.716      1.488      1.551  1.740  1.740
+(scale)_importance   0.034  0.036      0.027      0.033  0.035  0.035
+(scale)_information  2.836  2.781      2.386      2.769  2.495  2.495
+(scale)_firmness    -2.153 -2.163     -1.902     -2.161 -1.946 -1.946
+(scale)_pros:cons   -0.960 -0.991     -0.761     -0.875 -1.047 -1.047
+> 
+> 
+> 
+> cleanEx()
+
+detaching ‘package:AER’, ‘package:survival’, ‘package:sandwich’,
+  ‘package:lmtest’, ‘package:zoo’, ‘package:car’, ‘package:carData’
+
+> nameEx("BeetleMortality")
+> ### * BeetleMortality
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: BeetleMortality
+> ### Title: Bliss (1935) Beetle Mortality Data
+> ### Aliases: BeetleMortality
+> ### Keywords: datasets
+> 
+> ### ** Examples
+> 
+> ## data
+> data("BeetleMortality", package = "glmx")
+> 
+> ## various standard binary response models
+> m <- lapply(c("logit", "probit", "cloglog"), function(type)
++   glm(cbind(died, n - died) ~ dose, data = BeetleMortality, family = binomial(link = type)))
+> 
+> ## visualization
+> plot(I(died/n) ~ dose, data = BeetleMortality)
+> lines(fitted(m[[1]]) ~ dose, data = BeetleMortality, col = 2)
+> lines(fitted(m[[2]]) ~ dose, data = BeetleMortality, col = 3)
+> lines(fitted(m[[3]]) ~ dose, data = BeetleMortality, col = 4)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("MexicanLabor")
+> ### * MexicanLabor
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: MexicanLabor
+> ### Title: Mexican Women's Labor-Force Participation
+> ### Aliases: MexicanLabor
+> ### Keywords: datasets
+> 
+> ### ** Examples
+> 
+> ## data
+> data("MexicanLabor", package = "glmx")
+> 
+> ## visualizations
+> plot(I(laborforce/total) ~ interaction(income, age), data = MexicanLabor)
+> plot(I(laborforce/total) ~ interaction(schooling, locality), data = MexicanLabor)
+> 
+> ## simple logit model
+> m <- glm(cbind(laborforce, total - laborforce) ~ ., data = MexicanLabor, family = binomial)
+> summary(m)
+
+Call:
+glm(formula = cbind(laborforce, total - laborforce) ~ ., family = binomial, 
+    data = MexicanLabor)
+
+Deviance Residuals: 
+    Min       1Q   Median       3Q      Max  
+-1.4465  -0.8835  -0.2971   0.2576   1.8283  
+
+Coefficients:
+                 Estimate Std. Error z value Pr(>|z|)    
+(Intercept)      -2.58575    0.13286 -19.462  < 2e-16 ***
+localityurban     0.38931    0.11608   3.354 0.000797 ***
+age> 24           0.29212    0.11949   2.445 0.014493 *  
+incomehigh       -0.01521    0.12482  -0.122 0.903048    
+schoolingfurther  0.54814    0.10866   5.045 4.54e-07 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 73.887  on 15  degrees of freedom
+Residual deviance: 15.959  on 11  degrees of freedom
+AIC: 95.614
+
+Number of Fisher Scoring iterations: 4
+
+> 
+> 
+> 
+> cleanEx()
+> nameEx("WECO")
+> ### * WECO
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: WECO
+> ### Title: Productivity and Quit Behavior of Western Electric Workers
+> ### Aliases: WECO
+> ### Keywords: datasets
+> 
+> ### ** Examples
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("glmx")
+> ### * glmx
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: glmx
+> ### Title: Generalized Linear Models with Extra Parameters
+> ### Aliases: glmx glmx.fit coef.glmx formula.glmx logLik.glmx nobs.glmx
+> ###   print.glmx summary.glmx vcov.glmx predict.glmx
+> ### Keywords: regression
+> 
+> ### ** Examples
+> 
+> ## artificial data from geometric regression
+> set.seed(1)
+> d <- data.frame(x = runif(200, -1, 1))
+> d$y <- rnbinom(200, mu = exp(0 + 3 * d$x), size = 1)
+> 
+> ### negative binomial regression ###
+> 
+> ## negative binomial regression via glmx
+> if(require("MASS")) {
++ m_nb1 <- glmx(y ~ x, data = d,
++   family = negative.binomial, xlink = "log", xstart = 0)
++ summary(m_nb1)
++ 
++ ## negative binomial regression via MASS::glm.nb
++ m_nb2 <- glm.nb(y ~ x, data = d)
++ summary(m_nb2)
++ 
++ ## comparison
++ if(require("lmtest")) {
++ logLik(m_nb1)
++ logLik(m_nb2)
++ coeftest(m_nb1)
++ coeftest(m_nb2)
++ exp(coef(m_nb1, model = "extra"))
++ m_nb2$theta
++ exp(coef(m_nb1, model = "extra")) * sqrt(vcov(m_nb1, model = "extra"))
++ m_nb2$SE.theta
++ }}
+Loading required package: MASS
+Loading required package: lmtest
+Loading required package: zoo
+
+Attaching package: ‘zoo’
+
+The following objects are masked from ‘package:base’:
+
+    as.Date, as.Date.numeric
+
+[1] 0.251833
+> 
+> ## if the score (or gradient) contribution of the extra parameters
+> ## is supplied, then estimation can be speeded up:
+> negbin <- function(theta) {
++   fam <- negative.binomial(theta)
++   fam$loglik.extra <- function(y, mu, theta) digamma(y + theta) - digamma(theta) +
++     log(theta) + 1 - log(mu + theta) - (y + theta)/(mu + theta)
++   fam
++ }
+> m_nb3 <- glmx(y ~ x, data = d,
++   family = negbin, xlink = "log", xstart = 0, profile = FALSE)
+> all.equal(coef(m_nb1), coef(m_nb3), tolerance = 1e-7)
+[1] TRUE
+> 
+> 
+> ### censored negative binomial hurdle regression (0 vs. > 0) ###
+> 
+> ## negative binomial zero hurdle part via glmx
+> nbbin <- function(theta) binomial(link = nblogit(theta))
+> m_hnb1 <- glmx(factor(y > 0) ~ x, data = d,
++   family = nbbin, xlink = "log", xstart = 0)
+> summary(m_hnb1)
+
+Call:
+glmx(formula = factor(y > 0) ~ x, data = d, family = nbbin, xlink = "log", 
+    xstart = 0)
+
+Deviance residuals:
+   Min     1Q Median     3Q    Max 
+0.0254 0.2368 0.5597 1.3687 7.2594 
+
+Coefficients (binomial model with nblogit link):
+            Estimate Std. Error z value Pr(>|z|)   
+(Intercept)  -0.1827     0.3417  -0.535  0.59275   
+x             2.2709     0.7165   3.170  0.00153 **
+
+Extra parameters (with log link):
+           Estimate Std. Error z value Pr(>|z|)
+log(theta)    1.412      2.345   0.602    0.547
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+
+Log-likelihood: -95.02 on 3 Df
+Dispersion: 1
+Number of iterations in BFGS optimization: 9 (profile) 1 (full)
+> 
+> ## negative binomial hurdle regression via pscl::hurdle
+> ## (see only zero hurdle part)
+> if(require("pscl")) {
++ m_hnb2 <- hurdle(y ~ x, data = d, dist = "negbin", zero.dist = "negbin")
++ summary(m_hnb2)
++ }
+Loading required package: pscl
+Classes and Methods for R developed in the
+Political Science Computational Laboratory
+Department of Political Science
+Stanford University
+Simon Jackman
+hurdle and zeroinfl functions by Achim Zeileis
+
+Call:
+hurdle(formula = y ~ x, data = d, dist = "negbin", zero.dist = "negbin")
+
+Pearson residuals:
+    Min      1Q  Median      3Q     Max 
+-1.0850 -0.6256 -0.3790  0.4535  4.4274 
+
+Count model coefficients (truncated negbin with log link):
+            Estimate Std. Error z value Pr(>|z|)    
+(Intercept)  -0.1178     0.2188  -0.538    0.590    
+x             3.2573     0.3271   9.959   <2e-16 ***
+Log(theta)    0.2066     0.2970   0.696    0.487    
+Zero hurdle model coefficients (censored negbin with log link):
+            Estimate Std. Error z value Pr(>|z|)   
+(Intercept)  -0.1827     0.3416  -0.535  0.59274   
+x             2.2709     0.7165   3.170  0.00153 **
+Log(theta)    1.4115     2.3451   0.602  0.54725   
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+
+Theta: count = 1.2295, zero = 4.1021
+Number of iterations in BFGS optimization: 29 
+Log-likelihood: -342.8 on 6 Df
+> 
+> 
+> 
+> cleanEx()
+
+detaching ‘package:pscl’, ‘package:lmtest’, ‘package:zoo’,
+  ‘package:MASS’
+
+> nameEx("hetglm")
+> ### * hetglm
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: hetglm
+> ### Title: Heteroscedastic Binary Response GLMs
+> ### Aliases: hetglm hetglm.fit print.hetglm summary.hetglm
+> ###   print.summary.hetglm predict.hetglm coef.hetglm vcov.hetglm
+> ###   bread.hetglm estfun.hetglm coeftest.hetglm logLik.hetglm terms.hetglm
+> ###   model.frame.hetglm model.matrix.hetglm residuals.hetglm update.hetglm
+> ### Keywords: regression
+> 
+> ### ** Examples
+> 
+> ## Generate artifical binary data from a latent
+> ## heteroscedastic normally distributed variable
+> set.seed(48)
+> n <- 200
+> x <- rnorm(n)
+> ystar <- 1 + x +  rnorm(n, sd = exp(x))
+> y  <- factor(ystar > 0) 
+> 
+> ## visualization
+> par(mfrow = c(1, 2))
+> plot(ystar ~ x, main = "latent")
+> abline(h = 0, lty = 2)
+> plot(y ~ x, main = "observed")
+> 
+> ## model fitting of homoscedastic model (m0a/m0b)
+> ## and heteroscedastic model (m)
+> m0a <- glm(y ~ x, family = binomial(link = "probit"))
+> m0b <- hetglm(y ~ x | 1)
+> m <- hetglm(y ~ x)
+> 
+> ## coefficient estimates
+> cbind(heteroscedastic = coef(m),
++   homoscedastic = c(coef(m0a), 0))
+            heteroscedastic homoscedastic
+(Intercept)        1.109258     0.5320893
+x                  1.086656     0.3262606
+(scale)_x          1.267372     0.0000000
+> 
+> ## summary of correct heteroscedastic model
+> summary(m)
+
+Call:
+hetglm(formula = y ~ x)
+
+Deviance residuals:
+    Min      1Q  Median      3Q     Max 
+-2.0380 -0.0022  0.5467  0.6974  1.5845 
+
+Coefficients (binomial model with probit link):
+            Estimate Std. Error z value Pr(>|z|)    
+(Intercept)   1.1093     0.1401   7.918 2.42e-15 ***
+x             1.0867     0.1492   7.284 3.24e-13 ***
+
+Latent scale model coefficients (with log link):
+  Estimate Std. Error z value Pr(>|z|)    
+x   1.2674     0.2015   6.291 3.16e-10 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+
+Log-likelihood: -92.92 on 3 Df
+LR test for homoscedasticity: 46.14 on 1 Df, p-value: 1.101e-11
+Dispersion: 1
+Number of iterations in nlminb optimization: 9 
+> 
+> 
+> 
+> ## Generate artificial binary data with a single binary regressor
+> ## driving the heteroscedasticity in a model with two regressors
+> set.seed(48)
+> n <- 200
+> x <- rnorm(n)
+> z <- rnorm(n)
+> a <- factor(sample(1:2, n, replace = TRUE))
+> ystar <- 1 + c(0, 1)[a] + x + z + rnorm(n, sd = c(1, 2)[a])
+> y  <- factor(ystar > 0) 
+> 
+> ## fit "true" heteroscedastic model
+> m1 <- hetglm(y ~ a + x + z | a)
+> 
+> ## fit interaction model
+> m2 <- hetglm(y ~ a/(x + z) | 1)
+> 
+> ## although not obvious at first sight, the two models are
+> ## nested. m1 is a restricted version of m2 where the following
+> ## holds: a1:x/a2:x == a1:z/a2:z
+> if(require("lmtest")) lrtest(m1, m2)
+Loading required package: lmtest
+Loading required package: zoo
+
+Attaching package: ‘zoo’
+
+The following objects are masked from ‘package:base’:
+
+    as.Date, as.Date.numeric
+
+Likelihood ratio test
+
+Model 1: y ~ a + x + z | a
+Model 2: y ~ a/(x + z) | 1
+  #Df  LogLik Df  Chisq Pr(>Chisq)
+1   5 -75.088                     
+2   6 -75.064  1 0.0466     0.8292
+> 
+> ## both ratios are == 2 in the data generating process
+> c(x = coef(m2)[3]/coef(m2)[4], z = coef(m2)[5]/coef(m2)[6])
+  x.a1:x   z.a1:z 
+3.758025 3.179625 
+> 
+> 
+> 
+> if(require("AER")) {
++ 
++ ## Labor force participation example from Greene
++ ## (5th edition: Table 21.3, p. 682)
++ ## (6th edition: Table 23.4, p. 790)
++ 
++ ## data (including transformations)
++ data("PSID1976", package = "AER")
++ PSID1976$kids <- with(PSID1976, factor((youngkids + oldkids) > 0,
++   levels = c(FALSE, TRUE), labels = c("no", "yes")))
++ PSID1976$fincome <- PSID1976$fincome/10000
++ 
++ ## Standard probit model via glm()
++ lfp0a <- glm(participation ~ age + I(age^2) + fincome + education + kids,
++   data = PSID1976, family = binomial(link = "probit"))
++ 
++ ## Standard probit model via hetglm() with constant scale
++ lfp0b <- hetglm(participation ~ age + I(age^2) + fincome + education + kids | 1,
++   data = PSID1976)
++ 
++ ## Probit model with varying scale
++ lfp1 <- hetglm(participation ~ age + I(age^2) + fincome + education + kids | kids + fincome,
++   data = PSID1976)
++ 
++ ## Likelihood ratio and Wald test
++ lrtest(lfp0b, lfp1)
++ waldtest(lfp0b, lfp1)
++ 
++ ## confusion matrices
++ table(true = PSID1976$participation,
++   predicted = fitted(lfp0b) <= 0.5)
++ table(true = PSID1976$participation,
++   predicted = fitted(lfp1) <= 0.5)
++ 
++ 
++ 
++ ## Adapted (and somewhat artificial) example to illustrate that
++ ## certain models with heteroscedastic scale can equivalently
++ ## be interpreted as homoscedastic scale models with interaction
++ ## effects.
++ 
++ ## probit model with main effects and heteroscedastic scale in two groups
++ m <- hetglm(participation ~ kids + fincome | kids, data = PSID1976)
++ 
++ ## probit model with interaction effects and homoscedastic scale
++ p <- glm(participation ~ kids * fincome, data = PSID1976,
++    family = binomial(link = "probit"))
++ 
++ ## both likelihoods are equivalent
++ logLik(m)
++ logLik(p)
++ 
++ ## intercept/slope for the kids=="no" group
++ coef(m)[c(1, 3)]
++ coef(p)[c(1, 3)]
++ 
++ ## intercept/slope for the kids=="yes" group
++ c(sum(coef(m)[1:2]), coef(m)[3]) / exp(coef(m)[4])
++ coef(p)[c(1, 3)] + coef(p)[c(2, 4)]
++ 
++ ## Wald tests for the heteroscedasticity effect in m and the 
++ ## interaction effect in p are very similar
++ coeftest(m)[4,]
++ coeftest(p)[4,]
++ 
++ ## corresponding likelihood ratio tests are equivalent
++ ## (due to the invariance of the MLE)
++ m0 <- hetglm(participation ~ kids + fincome | 1, data = PSID1976)
++ p0 <- glm(participation ~ kids + fincome, data = PSID1976,
++   family = binomial(link = "probit"))
++ lrtest(m0, m)
++ lrtest(p0, p)
++ 
++ }
+Loading required package: AER
+Loading required package: car
+Loading required package: carData
+Loading required package: sandwich
+Loading required package: survival
+Likelihood ratio test
+
+Model 1: participation ~ kids + fincome
+Model 2: participation ~ kids * fincome
+  #Df  LogLik Df  Chisq Pr(>Chisq)
+1   3 -510.65                     
+2   4 -510.10  1 1.0947     0.2954
+> 
+> 
+> 
+> graphics::par(get("par.postscript", pos = 'CheckExEnv'))
+> cleanEx()
+
+detaching ‘package:AER’, ‘package:survival’, ‘package:sandwich’,
+  ‘package:car’, ‘package:carData’, ‘package:lmtest’, ‘package:zoo’
+
+> nameEx("pregibon")
+> ### * pregibon
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: pregibon
+> ### Title: Pregibon Distribution
+> ### Aliases: dpregibon ppregibon qpregibon rpregibon
+> ### Keywords: distribution
+> 
+> ### ** Examples
+> 
+> ## Koenker & Yoon (2009), Figure 2
+> par(mfrow = c(3, 3))
+> pregiboncurve <- function(a, b, from, to, n = 301) {
++   dp <- function(x) dpregibon(x, a = a, b = b)
++   curve(dp, from = from, to = to, n = n,
++     xlab = "", ylab = "",
++     main = paste("a = ", a, ", b = ", b, sep = ""))
++ }
+> pregiboncurve(-0.25, -0.25,  -5, 65)
+> pregiboncurve(-0.25,  0,    -18, 18)
+> pregiboncurve(-0.25,  0.25, -65,  5)
+> pregiboncurve( 0,    -0.25,  -4, 22)
+> pregiboncurve( 0,     0,     -8,  8)
+> pregiboncurve( 0,     0.25, -22,  4)
+> pregiboncurve( 0.25, -0.25,  -2.4,9)
+> pregiboncurve( 0.25,  0,     -4,  4)
+> pregiboncurve( 0.25,  0.25,  -9,  2.4)
+> par(mfrow = c(1, 1))
+> 
+> 
+> 
+> graphics::par(get("par.postscript", pos = 'CheckExEnv'))
+> ### * <FOOTER>
+> ###
+> cleanEx()
+> options(digits = 7L)
+> base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
+Time elapsed:  2.071 0.054 2.124 0 0 
+> grDevices::dev.off()
+null device 
+          1 
+> ###
+> ### Local variables: ***
+> ### mode: outline-minor ***
+> ### outline-regexp: "\\(> \\)?### [*]+" ***
+> ### End: ***
+> quit('no')

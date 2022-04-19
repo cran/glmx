@@ -142,7 +142,7 @@ negbin <- function(theta) {
 }
 m_nb3 <- glmx(y ~ x, data = d,
   family = negbin, xlink = "log", xstart = 0, profile = FALSE)
-all.equal(coef(m_nb1), coef(m_nb3))
+all.equal(coef(m_nb1), coef(m_nb3), tolerance = 1e-7)
 
 
 ### censored negative binomial hurdle regression (0 vs. > 0) ###

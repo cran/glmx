@@ -18,10 +18,10 @@
 \alias{residuals.hetglm}
 \alias{update.hetglm}
 
-\title{Heteroskedastic Binary Response GLMs}
+\title{Heteroscedastic Binary Response GLMs}
 
 \description{
-  Fit heteroskedastic binary response models via maximum likelihood.
+  Fit heteroscedastic binary response models via maximum likelihood.
 }
 
 \usage{
@@ -83,10 +83,10 @@ hetglm.fit(x, y, z = NULL, weights = NULL, offset = NULL,
   \item{offset}{the list of offset vectors used (if any),}
   \item{n}{number of observations,}
   \item{nobs}{number of observations with non-zero weights,}
-  \item{df.null}{residual degrees of freedom in the homoskedastic null model,}
+  \item{df.null}{residual degrees of freedom in the homoscedastic null model,}
   \item{df.residual}{residual degrees of freedom in the fitted model,}
   \item{loglik}{log-likelihood of the fitted model,}
-  \item{loglik.null}{log-likelihood of the homoskedastic null model,}
+  \item{loglik.null}{log-likelihood of the homoscedastic null model,}
   \item{dispersion}{estimate of the dispersion parameter (if any),}
   \item{vcov}{covariance matrix of all parameters in the model,}
   \item{family}{the family object used,}
@@ -113,7 +113,7 @@ hetglm.fit(x, y, z = NULL, weights = NULL, offset = NULL,
 
 \examples{
 ## Generate artifical binary data from a latent
-## heteroskedastic normally distributed variable
+## heteroscedastic normally distributed variable
 set.seed(48)
 n <- 200
 x <- rnorm(n)
@@ -126,23 +126,23 @@ plot(ystar ~ x, main = "latent")
 abline(h = 0, lty = 2)
 plot(y ~ x, main = "observed")
 
-## model fitting of homoskedastic model (m0a/m0b)
-## and heteroskedastic model (m)
+## model fitting of homoscedastic model (m0a/m0b)
+## and heteroscedastic model (m)
 m0a <- glm(y ~ x, family = binomial(link = "probit"))
 m0b <- hetglm(y ~ x | 1)
 m <- hetglm(y ~ x)
 
 ## coefficient estimates
-cbind(heteroskedastic = coef(m),
-  homoskedastic = c(coef(m0a), 0))
+cbind(heteroscedastic = coef(m),
+  homoscedastic = c(coef(m0a), 0))
 
-## summary of correct heteroskedastic model
+## summary of correct heteroscedastic model
 summary(m)
 
 
 
 ## Generate artificial binary data with a single binary regressor
-## driving the heteroskedasticity in a model with two regressors
+## driving the heteroscedasticity in a model with two regressors
 set.seed(48)
 n <- 200
 x <- rnorm(n)
@@ -151,7 +151,7 @@ a <- factor(sample(1:2, n, replace = TRUE))
 ystar <- 1 + c(0, 1)[a] + x + z + rnorm(n, sd = c(1, 2)[a])
 y  <- factor(ystar > 0) 
 
-## fit "true" heteroskedastic model
+## fit "true" heteroscedastic model
 m1 <- hetglm(y ~ a + x + z | a)
 
 ## fit interaction model
@@ -204,14 +204,14 @@ table(true = PSID1976$participation,
 
 
 ## Adapted (and somewhat artificial) example to illustrate that
-## certain models with heteroskedastic scale can equivalently
-## be interpreted as homoskedastic scale models with interaction
+## certain models with heteroscedastic scale can equivalently
+## be interpreted as homoscedastic scale models with interaction
 ## effects.
 
-## probit model with main effects and heteroskedastic scale in two groups
+## probit model with main effects and heteroscedastic scale in two groups
 m <- hetglm(participation ~ kids + fincome | kids, data = PSID1976)
 
-## probit model with interaction effects and homoskedastic scale
+## probit model with interaction effects and homoscedastic scale
 p <- glm(participation ~ kids * fincome, data = PSID1976,
    family = binomial(link = "probit"))
 
@@ -227,7 +227,7 @@ coef(p)[c(1, 3)]
 c(sum(coef(m)[1:2]), coef(m)[3]) / exp(coef(m)[4])
 coef(p)[c(1, 3)] + coef(p)[c(2, 4)]
 
-## Wald tests for the heteroskedasticity effect in m and the 
+## Wald tests for the heteroscedasticity effect in m and the 
 ## interaction effect in p are very similar
 coeftest(m)[4,]
 coeftest(p)[4,]

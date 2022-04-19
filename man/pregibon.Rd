@@ -51,8 +51,8 @@ The corresponding link generator is available in the function \code{\link{pregib
 }
 
 \references{
-  King R (2013). \dQuote{Estimation and Use of the Generalised (Tukey) Lambda Distribution.}
-    R package version 2.0.1. \url{http://CRAN.R-project.org/package=gld}
+  King R, Dean B, Klinke S (2016). \dQuote{Estimation and Use of the Generalised (Tukey) Lambda Distribution.}
+    R package version 2.4.1. \url{https://CRAN.R-project.org/package=gld}
 
   Koenker R (2006). \dQuote{Parametric Links for Binary Response.}
     \emph{R News}, \bold{6}(4), 32--34.

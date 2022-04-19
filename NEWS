@@ -1,3 +1,18 @@
+Changes in Version 0.1-3
+
+  o Small documentation improvements.
+
+
+Changes in Version 0.1-2
+
+  o Improved family initialization in case of binomial (rather than binary)
+    models.
+
+  o Unified spelling to "heteroscedastic" rather than "heteroskedastic".
+
+  o Added some 'tests' as well as reference output for the examples.
+
+
 Changes in Version 0.1-1
 
   o Added predict() method for "glmx" objects.
@@ -11,7 +26,7 @@ Changes in Version 0.1-0
     still under development and both interfaces and internals
     might change in future releases.
     
-  o The main functions are hetglm() for heteroskedastic GLMs
-    (in particular heteroskedastic probit etc.), glmx() for GLMs
+  o The main functions are hetglm() for heteroscedastic GLMs
+    (in particular heteroscedastic probit etc.), glmx() for GLMs
     with extra parameters (such as parametric links), and a collection
     of parametric links for binary regressions.

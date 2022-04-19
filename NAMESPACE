@@ -4,7 +4,7 @@ importFrom("sandwich", "bread", "estfun")
 importFrom("MASS", "negative.binomial")
 
 export(
-  ## heteroskedastic GLMs
+  ## heteroscedastic GLMs
   "hetglm",
   "hetglm.fit",
   "hetglm.control",
