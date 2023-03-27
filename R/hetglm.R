@@ -136,19 +136,12 @@ hetglm.fit <- function(x, y, z = NULL, weights = NULL, offset = NULL,
   m <- NCOL(z)
 
   ## account for estimated dispersion
-  if(is.null(family$dispersion)) family$dispersion <- family$family %in% c("gaussian", "Gamma", "inverse.gaussian")
-  if(family$dispersion) {
-    dispersion <- function(wresiduals, wweights) sum(wresiduals^2, na.rm = TRUE)/sum(wweights, na.rm = TRUE)
-    dpar <- 1
-  } else {
-    dispersion <- function(wresiduals, wweights) 1
-    dpar <- 0
-  }
-  ## FIXME: Not clear whether dispersion is handled consistently in
-  ## "glm". In summary.glm() the dispersion is only fixed for "binomial"
-  ## and "poisson". In logLik.glm() an additional parameter is accounted for
-  ## only for "gaussian", "Gamma", "inverse.gaussian".
-  ## Maybe suggest adding disperion = FALSE/TRUE to family objects?
+  dpar <- as.numeric(dispersion_free(family))
+  dispersion <- make_dispersion_function(family)
+
+  ## NOTE: Dispersion handling was somewhat obscure in "glm" prior to R 4.3.0
+  ## and handled differently between summary.glm() and logLik.glm(). Situation
+  ## was improved by Martyn Plummer in R 4.3.0.
 
   ## link processing
   linkinv <- family$linkinv
@@ -513,11 +506,7 @@ estfun.hetglm <- function(x, ...)
   wts <- weights(x)
   if(is.null(wts)) wts <- 1
 
-  if(x$family$dispersion) {
-    dispersion <- function(wresiduals, wweights) sum(wresiduals^2, na.rm = TRUE)/sum(wweights, na.rm = TRUE)
-  } else {
-    dispersion <- function(wresiduals, wweights) 1
-  }
+  dispersion <- make_dispersion_function(x$family)
 
   beta <- x$coefficients$mean
   gamma <- x$coefficients$scale
@@ -544,7 +533,7 @@ coeftest.hetglm <- function(x, vcov. = NULL, df = Inf, ...)
   coeftest.default(x, vcov. = vcov., df = df, ...)  
 
 logLik.hetglm <- function(object, ...) {
-  structure(object$loglik, df = sum(sapply(object$coefficients, length)) + object$family$dispersion, class = "logLik")
+  structure(object$loglik, df = sum(sapply(object$coefficients, length)) + dispersion_free(object$family), class = "logLik")
 }
 
 terms.hetglm <- function(x, model = c("mean", "scale"), ...) {

@@ -44,7 +44,7 @@ plot(I(laborforce/total) ~ interaction(schooling, locality), data = MexicanLabor
 
 ## simple logit model
 m <- glm(cbind(laborforce, total - laborforce) ~ ., data = MexicanLabor, family = binomial)
-summary(m)
+m
 }
 
 \keyword{datasets}

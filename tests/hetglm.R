@@ -34,6 +34,6 @@ confint(mbin)
 confint(mpoi)
 
 ## full summaries
-summary(mnum)
-summary(mbin)
-summary(mpoi)
+print(summary(mnum), show.residuals = TRUE)
+print(summary(mbin), show.residuals = TRUE)
+print(summary(mpoi), show.residuals = TRUE)

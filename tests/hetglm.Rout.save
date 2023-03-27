@@ -1,6 +1,6 @@
 
-R version 3.4.1 (2017-06-30) -- "Single Candle"
-Copyright (C) 2017 The R Foundation for Statistical Computing
+R version 4.2.2 Patched (2022-11-10 r83330) -- "Innocent and Trusting"
+Copyright (C) 2022 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -67,7 +67,7 @@ x            0.86476 1.2106
 (scale)_z    0.75911 1.1536
 > 
 > ## full summaries
-> summary(mnum)
+> print(summary(mnum), show.residuals = TRUE)
 
 Call:
 hetglm(formula = ynum ~ x | z, data = d, family = gaussian)
@@ -91,7 +91,7 @@ Log-likelihood: -734 on 3 Df
 LR test for homoscedasticity: 71.4 on 1 Df, p-value: <2e-16
 Dispersion: 0.887
 Number of iterations in nlminb optimization: 6 
-> summary(mbin)
+> print(summary(mbin), show.residuals = TRUE)
 
 Call:
 hetglm(formula = ybin ~ x | z, data = d, family = binomial)
@@ -115,7 +115,7 @@ Log-likelihood: -311 on 3 Df
 LR test for homoscedasticity:   19 on 1 Df, p-value: 1.34e-05
 Dispersion: 1
 Number of iterations in nlminb optimization: 7 
-> summary(mpoi)
+> print(summary(mpoi), show.residuals = TRUE)
 
 Call:
 hetglm(formula = ypoi ~ x | z, data = d, family = poisson)
@@ -142,4 +142,4 @@ Number of iterations in nlminb optimization: 7
 > 
 > proc.time()
    user  system elapsed 
-  0.584   0.024   0.603 
+  0.215   0.012   0.220 

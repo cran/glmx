@@ -1,6 +1,6 @@
 
-R version 4.1.2 (2021-11-01) -- "Bird Hippie"
-Copyright (C) 2021 The R Foundation for Statistical Computing
+R version 4.2.2 Patched (2022-11-10 r83330) -- "Innocent and Trusting"
+Copyright (C) 2022 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -264,34 +264,20 @@ detaching ‘package:AER’, ‘package:survival’, ‘package:sandwich’,
 > 
 > ## simple logit model
 > m <- glm(cbind(laborforce, total - laborforce) ~ ., data = MexicanLabor, family = binomial)
-> summary(m)
+> m
 
-Call:
-glm(formula = cbind(laborforce, total - laborforce) ~ ., family = binomial, 
+Call:  glm(formula = cbind(laborforce, total - laborforce) ~ ., family = binomial, 
     data = MexicanLabor)
 
-Deviance Residuals: 
-    Min       1Q   Median       3Q      Max  
--1.4465  -0.8835  -0.2971   0.2576   1.8283  
-
 Coefficients:
-                 Estimate Std. Error z value Pr(>|z|)    
-(Intercept)      -2.58575    0.13286 -19.462  < 2e-16 ***
-localityurban     0.38931    0.11608   3.354 0.000797 ***
-age> 24           0.29212    0.11949   2.445 0.014493 *  
-incomehigh       -0.01521    0.12482  -0.122 0.903048    
-schoolingfurther  0.54814    0.10866   5.045 4.54e-07 ***
----
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+     (Intercept)     localityurban           age> 24        incomehigh  
+        -2.58575           0.38931           0.29212          -0.01521  
+schoolingfurther  
+         0.54814  
 
-(Dispersion parameter for binomial family taken to be 1)
-
-    Null deviance: 73.887  on 15  degrees of freedom
-Residual deviance: 15.959  on 11  degrees of freedom
-AIC: 95.614
-
-Number of Fisher Scoring iterations: 4
-
+Degrees of Freedom: 15 Total (i.e. Null);  11 Residual
+Null Deviance:	    73.89 
+Residual Deviance: 15.96 	AIC: 95.61
 > 
 > 
 > 
@@ -704,7 +690,7 @@ detaching ‘package:AER’, ‘package:survival’, ‘package:sandwich’,
 > cleanEx()
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  2.071 0.054 2.124 0 0 
+Time elapsed:  1.712 0.06 1.773 0 0 
 > grDevices::dev.off()
 null device 
           1 

@@ -121,14 +121,8 @@ glmx.fit <- function(x, y, weights = NULL, offset = NULL,
   k <- NCOL(x)
   q <- length(xstart)
 
-  if(is.null(family_start$dispersion)) family_start$dispersion <- family_start$family %in% c("gaussian", "Gamma", "inverse.gaussian")
-  if(family_start$dispersion) {
-    dispersion <- function(wresiduals, wweights) sum(wresiduals^2, na.rm = TRUE)/sum(wweights, na.rm = TRUE)
-    dpar <- 1
-  } else {
-    dispersion <- function(wresiduals, wweights) 1
-    dpar <- 0
-  }
+  dpar <- as.numeric(dispersion_free(family_start))
+  dispersion <- make_dispersion_function(family_start)  
   df <- k + q + dpar
 
   ## objective function
@@ -414,5 +408,27 @@ predict.glmx <- function(object, newdata = NULL,
     names(rval) <- rownames(mf)
     return(rval)
 
+  }
+}
+
+dispersion_free <- function(family) {
+  if (!is.null(family$dispersion)) {
+    ## R >= 4.3.0
+    is.na(family$dispersion)
+  } else {
+    ## R < 4.3.0
+    family$family %in% c("gaussian", "Gamma", "inverse.gaussian")
+  }
+}
+
+make_dispersion_function <- function(family) {
+  if (dispersion_free(family)) {
+    function(wresiduals, wweights) sum(wresiduals^2, na.rm = TRUE)/sum(wweights, na.rm = TRUE)
+  } else if (!is.null(family$dispersion)) {
+    ## R >= 4.3.0
+    function(wresiduals, wweights) family$dispersion
+  } else {
+    ## R < 4.3.0
+    function(wresiduals, wweights) 1
   }
 }
