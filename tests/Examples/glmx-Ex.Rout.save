@@ -1,7 +1,7 @@
 
-R version 4.2.2 Patched (2022-11-10 r83330) -- "Innocent and Trusting"
-Copyright (C) 2022 The R Foundation for Statistical Computing
-Platform: x86_64-pc-linux-gnu (64-bit)
+R version 4.4.1 (2024-06-14) -- "Race for Your Life"
+Copyright (C) 2024 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
@@ -403,12 +403,12 @@ Number of iterations in BFGS optimization: 9 (profile) 1 (full)
 + summary(m_hnb2)
 + }
 Loading required package: pscl
-Classes and Methods for R developed in the
+Classes and Methods for R originally developed in the
 Political Science Computational Laboratory
 Department of Political Science
-Stanford University
-Simon Jackman
-hurdle and zeroinfl functions by Achim Zeileis
+Stanford University (2002-2015),
+by and under the direction of Simon Jackman.
+hurdle and zeroinfl functions by Achim Zeileis.
 
 Call:
 hurdle(formula = y ~ x, data = d, dist = "negbin", zero.dist = "negbin")
@@ -690,7 +690,7 @@ detaching ‘package:AER’, ‘package:survival’, ‘package:sandwich’,
 > cleanEx()
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  1.712 0.06 1.773 0 0 
+Time elapsed:  1.753 0.056 1.836 0 0 
 > grDevices::dev.off()
 null device 
           1 

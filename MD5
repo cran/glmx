@@ -1,11 +1,11 @@
-f3d024f8b4a8cdfe01b504804ec40e99 *DESCRIPTION
+762028b2d0a791dba877733f71c2057c *DESCRIPTION
 8881091db74874d7cf14bb84a107e58a *NAMESPACE
-d0453d424947909efb4fb2a5a5517e74 *NEWS.md
+bcb9e105f09f02882adea9ee2aec45ee *NEWS.md
 9e57a683ed0eedb67cd2f8ff61482ae2 *R/glmx.R
 d7e5d37b604fc237a2827a8d0ec47d68 *R/hetglm.R
 29ca38524b123662f9ab384ab8af281f *R/plinks.R
 f7df0f36129cf8a1a2fbfaa5a167bd71 *R/pregibon.R
-ea124a494ad7922985532ad3b308e4d5 *build/partial.rdb
+aa5e5a2cbfaea3d9b6cdbe378ac48cee *build/partial.rdb
 2ccdbeaad4399a5e0d3eb35c779c5dad *data/AbortionAmbivalence.rda
 2d51cfb3fdd57aab775fdd098b112cfe *data/BeetleMortality.rda
 729aaa9c213b87add6365efd32bb6f6a *data/MexicanLabor.rda
@@ -20,6 +20,6 @@ b53cbf6d789044f9fe391c89d7fbda28 *man/glmx.control.Rd
 65f3a1fe0f49a452cae9034fd2830608 *man/hetglm.control.Rd
 f3086973a3f16e734691fb85bfa03833 *man/plinks.Rd
 eec001c93150bcbf53163a7ccbdf1ab9 *man/pregibon.Rd
-9c74ed883eaefb08347307b211f54a78 *tests/Examples/glmx-Ex.Rout.save
+586239eb12c7f479b5556190def1fc88 *tests/Examples/glmx-Ex.Rout.save
 812259d809ffbc69a675890c7ccecb8e *tests/hetglm.R
 5b5bf519d4bd7053557a1d07ab40c499 *tests/hetglm.Rout.save

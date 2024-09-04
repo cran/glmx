@@ -1,3 +1,8 @@
+# glmx 0.2-1
+
+* Updated example reference output for CRAN checks.
+
+
 # glmx 0.2-0
 
 * Improved handling of dispersion in GLM families based on the new
