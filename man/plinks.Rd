@@ -83,10 +83,7 @@
   parameter family.
   
   The folded exponential family (Piepho, 2003) is symmetric and given by
-  \deqn{y = \left\{\begin{array}{ll}
-    \frac{\exp(\phi x)-\exp(\phi(1-x))}{2\phi}   &(\phi \neq 0) \\
-    x- \frac{1}{2}                 &(\phi = 0)  
-    \end{array}\right.}  
+  \deqn{y = \left\{\begin{array}{ll} \frac{\exp(\phi x)-\exp(\phi(1-x))}{2\phi} & (\phi \neq 0) \\ x- \frac{1}{2} &(\phi = 0) \end{array}\right.}  
   
   The \eqn{t_\alpha} family (Doebler, Holling & Boehning, 2011) given by
   \deqn{y = \alpha\log(x)-(2-\alpha)\log(1-x)}{y = \alpha\log(x)-(2-\alpha)\log(1-x)}

@@ -1,3 +1,12 @@
+# glmx 0.2-2
+
+* Code repository changed from R-Forge to Codeberg at:
+  <https://codeberg.org/zeileis/glmx/>
+
+* Added basic altdoc page with overview and documentation at:
+  <https://zeileis.codeberg.page/glmx/>
+
+
 # glmx 0.2-1
 
 * Updated example reference output for CRAN checks.
